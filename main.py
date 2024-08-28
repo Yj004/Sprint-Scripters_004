@@ -6,7 +6,7 @@ import plotly.express as px
 st.title("landing page")
 
 # Read data
-df = pd.read_csv("project_data\World Wide Cases detail.csv",encoding="ISO-8859-1")
+df = pd.read_csv("project_data/World Wide Cases detail.csv",encoding="ISO-8859-1")
 st.dataframe(df)
 
 # Get data for the selected years
