@@ -3,7 +3,7 @@ import numpy as np
 import streamlit as st
 import matplotlib.pyplot as plt
 import plotly.express as px
-st.title("landing page")
+st.title( u"\u2757" + "World Data Analysis")
 
 # Read data
 df = pd.read_csv("project_data/World Wide Cases detail.csv",encoding="ISO-8859-1")
