@@ -1,8 +1,8 @@
 import pandas as pd
 import numpy as np
 import streamlit as st
-import matplotlib.pyplot as plt
-import plotly.express as px
+# import matplotlib.pyplot as plt
+# import plotly.express as px
 st.title("landing page")
 
 # Read data
@@ -20,7 +20,7 @@ st.dataframe(category_crime)
 st.bar_chart(data=category_crime,x="Category",y="VALUE",x_label="category",y_label="Rape_cases")
 
 # Region wise crime cases
-region_crime = filtered_data.groupby("Region",as_index=False).agg({"VALUE":"sum"})
-st.dataframe(region_crime)
-fig = px.pie(data_frame=region_crime,names="Region",values="VALUE",title="Region wise cases")
-st.plotly_chart(fig)
+# region_crime = filtered_data.groupby("Region",as_index=False).agg({"VALUE":"sum"})
+# st.dataframe(region_crime)
+# fig = px.pie(data_frame=region_crime,names="Region",values="VALUE",title="Region wise cases")
+# st.plotly_chart(fig)
