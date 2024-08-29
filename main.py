@@ -59,7 +59,7 @@ st.dataframe(filtered_df)
     
 st.title("State wise summary of cases")  
 df1 = pd.read_csv("project_data/Summary of cases (rape) 2015-2020.csv")
-st.dataframe(df1)
+
 
 option = st.radio("Choose one option:", ("State wise trend","Anuual trend"))
 if option == "State wise trend":
