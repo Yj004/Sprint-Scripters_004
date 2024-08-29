@@ -77,3 +77,6 @@ if option == "State wise trend":
     df2 = pd.DataFrame({"Year":final_data.index,"Case_reported":final_data.values})
     
     st.line_chart(data=df2,x="Year",y="Case_reported",x_label="Years",y_label="Case_repoted")
+else:
+    select_year = st.selectbox(label="select a year",options=["2015 - CR","2016 - CR","2017 - CR","2018 - CR","2019 - CR","2020 - CR"])
+    st.bar_chart(data=df1,x="State/UT",y=select_year,x_label="States",y_label="case_reported")
