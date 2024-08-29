@@ -57,13 +57,9 @@ with col6:
     st.write(np.std(filtered_df["VALUE"]))
 st.dataframe(filtered_df)
     
-    
+st.title("State wise summary of cases")  
 df1 = pd.read_csv("project_data/Summary of cases (rape) 2015-2020.csv")
 st.dataframe(df1)
-# select_state = st.selectbox(label="select a state",options=df1["STATE/UT"].drop_duplicates())
-# filter4 = df3["State/UT"].isin(list(select_state))
-# filtered_state = df3[filter4]
-# # st.bar_chart(data=state_crime,x="No. Of Cases In Which Offenders Were Relatives",y="STATE/UT",x_label="state",y_label="Rape_cases")
 
 option = st.radio("Choose one option:", ("State wise trend","Anuual trend"))
 if option == "State wise trend":
