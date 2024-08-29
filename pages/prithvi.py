@@ -6,12 +6,12 @@ import seaborn as sns
 st.title("Sexual Assault Data Analysis App")
 
 # Load the datasets (Make sure the CSV files are in the same directory as your streamlit app)
-summary_cases = pd.read_csv('Summary of cases (rape) 2015-2020.csv', encoding='ISO-8859-1')
-detailed_cases_2001_2008 = pd.read_csv('Detailed Cases (Registered) sexual Assault 2001-2008.csv', encoding='ISO-8859-1')
-cases_oldest_1970 = pd.read_csv('Cases (Oldest) 1970.csv', encoding='ISO-8859-1')
-worldwide_cases = pd.read_csv('World Wide Cases detail.csv', encoding='ISO-8859-1')
-detailed_registered_unregistered_2018 = pd.read_csv('Detailed Register and Unregistered cases (Sexual assault) (Punished Release) 2018.csv', encoding='ISO-8859-1')
-state_wise_sexual_assault_1999_2013 = pd.read_csv('State wise Sexual Assault (Detailed) 1999 - 2013.csv', encoding='ISO-8859-1')
+summary_cases = pd.read_csv('Y:\masai projects\Sprint-Scripters_004\project_data\Summary of cases (rape) 2015-2020.csv', encoding='ISO-8859-1')
+detailed_cases_2001_2008 = pd.read_csv('Y:\masai projects\Sprint-Scripters_004\project_data\Detailed Cases (Registered) sexual Assault 2001-2008.csv', encoding='ISO-8859-1')
+cases_oldest_1970 = pd.read_csv('Y:\masai projects\Sprint-Scripters_004\project_data\Cases (Oldest) 1970.csv', encoding='ISO-8859-1')
+worldwide_cases = pd.read_csv('Y:\masai projects\Sprint-Scripters_004\project_data\World Wide Cases detail.csv', encoding='ISO-8859-1')
+detailed_registered_unregistered_2018 = pd.read_csv('Y:\masai projects\Sprint-Scripters_004\project_data\Detailed Register and Unregistered cases (Sexual assault) (Punished Release) 2018.csv', encoding='ISO-8859-1')
+state_wise_sexual_assault_1999_2013 = pd.read_csv('Y:\masai projects\Sprint-Scripters_004\project_data\State wise Sexual Assault (Detailed) 1999 - 2013.csv', encoding='ISO-8859-1')
 
 # Display the first few rows of each dataset
 st.subheader("Summary of Cases (Rape) 2015-2020:")
