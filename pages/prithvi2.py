@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Load your dataset
-summary_cases = pd.read_csv('project_data\Summary of cases (rape) 2015-2020.csv',encoding="ISO-8859-1")
+summary_cases = pd.read_csv('project_data/Summary of cases (rape) 2015-2020.csv',encoding="ISO-8859-1")
 
 # Set the page configuration
 st.set_page_config(page_title="Rape Violation Insights Chatbot", layout="wide")
