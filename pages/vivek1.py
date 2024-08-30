@@ -5,7 +5,7 @@ import seaborn as sns
 
 
 # Load the dataset
-df = pd.read_csv("project_data\Detailed Cases (Registered) sexual Assault 2001-2008.csv")
+df = pd.read_csv("project_data/Detailed Cases (Registered) sexual Assault 2001-2008.csv")
 
 # Sidebar for filtering
 st.sidebar.title("Filter Options")
