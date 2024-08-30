@@ -28,35 +28,6 @@ with col2:
     st.header("Region wise crimes")
     st.dataframe(region_crime)
 
-selected_column = st.sidebar.selectbox(label="select column",options=["Country","Category","Region"])
-    
-    
-if selected_column=="Country":
-    default_value= "Bulgaria"
-elif selected_column=="Category":
-    default_value="Kidnapping"
-else:
-    default_value="Americas"
-        
-selected_members = st.sidebar.multiselect(label="select members", options=df[selected_column].drop_duplicates(),default=default_value)
-
-filter2= df["Year"].isin(selected_years) & df[selected_column].isin(selected_members)
-filtered_df = df[filter2]
-col3, col4, col5, col6 = st.columns(4)
-with col3:
-    st.header("Min")
-    st.write(np.min(filtered_df["VALUE"]))
-with col4:
-    st.header("Max")
-    st.write(np.max(filtered_df["VALUE"]))
-with col5:
-    st.header("Mean")
-    st.write(np.mean(filtered_df["VALUE"]))
-with col6:
-    st.header("Variance")
-    st.write(np.std(filtered_df["VALUE"]))
-st.dataframe(filtered_df)
-    
 st.title("State wise summary of cases")  
 df1 = pd.read_csv("project_data/Summary of cases (rape) 2015-2020.csv")
 
@@ -66,7 +37,6 @@ if option == "State wise trend":
     select_state = st.selectbox(label="select a state",options=df1["State/UT"].drop_duplicates())
     filter4 = df1["State/UT"] == select_state
     filtered_state = df1[filter4]
-    st.dataframe(filtered_state)
     filtered_state.drop(columns=["Sl. No.","State/UT"],inplace=True)
     final_data = filtered_state.iloc[0]
     

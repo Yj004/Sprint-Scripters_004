@@ -6,8 +6,8 @@ import plotly.express as px
 st.set_page_config(layout="wide")
 
 # Load data
-data_path = "D:/masai projects/Sprint-Scripters_004/project_data/Detailed Cases (Registered) sexual Assault 2001-2008.csv"
-data_path2 = "Y:/masai projects/Sprint-Scripters_004/project_data/World Wide Cases detail.csv"
+data_path = "project_data/Detailed Cases (Registered) sexual Assault 2001-2008.csv"
+data_path2 = "project_data/World Wide Cases detail.csv"
 
 try:
     detailed_cases_df = pd.read_csv(data_path)
