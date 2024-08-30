@@ -28,7 +28,7 @@ def presentation_slide(title, content):
     st.write(content)
 
 # Interactive storytelling interface
-st.title("🔍 Prithvi3 - Story Telling")
+st.title("🔍 Rape Violation Insights")
 st.write("Explore the data through interactive slides and visualizations!")
 
 # Slide navigation
