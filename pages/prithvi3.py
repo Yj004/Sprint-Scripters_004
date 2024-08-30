@@ -7,7 +7,7 @@ import seaborn as sns
 summary_cases = pd.read_csv('project_data/Summary of cases (rape) 2015-2020.csv')
 
 # Set the page configuration
-st.set_page_config(page_title="Rape Violation Insights", layout="wide")
+st.set_page_config(page_title="Prithvi3 - Story Telling", layout="wide")
 
 # Function to plot trends for a specific state
 def plot_trend(state):
