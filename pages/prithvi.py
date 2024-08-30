@@ -6,31 +6,31 @@ import seaborn as sns
 st.title("Sexual Assault Data Analysis App")
 
 # Load the datasets (Make sure the CSV files are in the same directory as your streamlit app)
-summary_cases = pd.read_csv('project_data\Summary of cases (rape) 2015-2020.csv', encoding='ISO-8859-1')
-detailed_cases_2001_2008 = pd.read_csv('project_data\Detailed Cases (Registered) sexual Assault 2001-2008.csv', encoding='ISO-8859-1')
-cases_oldest_1970 = pd.read_csv('project_data\Cases (Oldest) 1970.csv', encoding='ISO-8859-1')
-worldwide_cases = pd.read_csv('project_data\World Wide Cases detail.csv', encoding='ISO-8859-1')
-detailed_registered_unregistered_2018 = pd.read_csv('project_data\Detailed Register and Unregistered cases (Sexual assault) (Punished Release) 2018.csv', encoding='ISO-8859-1')
-state_wise_sexual_assault_1999_2013 = pd.read_csv('project_data\State wise Sexual Assault (Detailed) 1999 - 2013.csv', encoding='ISO-8859-1')
+summary_cases = pd.read_csv('project_data/Summary of cases (rape) 2015-2020.csv', encoding='ISO-8859-1')
+detailed_cases_2001_2008 = pd.read_csv('project_data/Detailed Cases (Registered) sexual Assault 2001-2008.csv', encoding='ISO-8859-1')
+cases_oldest_1970 = pd.read_csv('project_data/Cases (Oldest) 1970.csv', encoding='ISO-8859-1')
+worldwide_cases = pd.read_csv('project_data/World Wide Cases detail.csv', encoding='ISO-8859-1')
+detailed_registered_unregistered_2018 = pd.read_csv('project_data/Detailed Register and Unregistered cases (Sexual assault) (Punished Release) 2018.csv', encoding='ISO-8859-1')
+state_wise_sexual_assault_1999_2013 = pd.read_csv('project_data/State wise Sexual Assault (Detailed) 1999 - 2013.csv', encoding='ISO-8859-1')
 
 # Display the first few rows of each dataset
-st.subheader("Summary of Cases (Rape) 2015-2020:")
-st.dataframe(summary_cases.head())
+# st.subheader("Summary of Cases (Rape) 2015-2020:")
+# st.dataframe(summary_cases.head())
 
-st.subheader("Detailed Cases (Registered) Sexual Assault 2001-2008:")
-st.dataframe(detailed_cases_2001_2008.head())
+# st.subheader("Detailed Cases (Registered) Sexual Assault 2001-2008:")
+# st.dataframe(detailed_cases_2001_2008.head())
 
-st.subheader("Cases (Oldest) 1970:")
-st.dataframe(cases_oldest_1970.head())
+# st.subheader("Cases (Oldest) 1970:")
+# st.dataframe(cases_oldest_1970.head())
 
-st.subheader("Worldwide Cases Details:")
-st.dataframe(worldwide_cases.head())
+# st.subheader("Worldwide Cases Details:")
+# st.dataframe(worldwide_cases.head())
 
-st.subheader("Detailed Registered and Unregistered Cases (Sexual Assault) 2018:")
-st.dataframe(detailed_registered_unregistered_2018.head())
+# st.subheader("Detailed Registered and Unregistered Cases (Sexual Assault) 2018:")
+# st.dataframe(detailed_registered_unregistered_2018.head())
 
 st.subheader("State-wise Sexual Assault (Detailed) 1999-2013:")
-st.dataframe(state_wise_sexual_assault_1999_2013.head())
+# st.dataframe(state_wise_sexual_assault_1999_2013.head())
 
 # Function to clean the dataset
 def clean_data(df, name):
