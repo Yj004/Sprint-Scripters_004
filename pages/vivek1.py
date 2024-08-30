@@ -3,14 +3,9 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-import pandas as pd
-import streamlit as st
-import matplotlib.pyplot as plt
-import seaborn as sns
 
-"C:/Users/vbaro/OneDrive/Desktop/MASAI\p/Sprint-Scripters_004/vivek/"
 # Load the dataset
-df = pd.read_csv("C:/Users/vbaro/OneDrive/Desktop/MASAI\p/Sprint-Scripters_004/vivek/1 Detailed Cases (Registered) sexual Assault 2001-2008.csv")
+df = pd.read_csv("project_data\Detailed Cases (Registered) sexual Assault 2001-2008.csv")
 
 # Sidebar for filtering
 st.sidebar.title("Filter Options")
