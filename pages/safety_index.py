@@ -1,134 +1,156 @@
 import pandas as pd
 import streamlit as st
-import plotly.express as px
+import matplotlib.pyplot as plt
+import seaborn as sns
 
-# Set page config to wide layout
-st.set_page_config(layout="wide")
 
-# Load data
-data_path = "project_data/Detailed Cases (Registered) sexual Assault 2001-2008.csv"
-data_path2 = "project_data/World Wide Cases detail.csv"
+# Load the dataset
+df = pd.read_csv("project_data/Detailed Cases (Registered) sexual Assault 2001-2008.csv")
 
-try:
-    detailed_cases_df = pd.read_csv(data_path)
-    worldwide_cases_df = pd.read_csv(data_path2,encoding='ISO-8859-1')
-except FileNotFoundError:
-    st.error(f"File not found. Please check the file path.")
-    st.stop()
-except Exception as e:
-    st.error(f"An error occurred while loading the data: {e}")
-    st.stop()
+# Sidebar for filtering
+st.sidebar.title("Filter Options")
 
-st.title('Rape Cases Data Display')
+# Year filter
+years = df['Year'].unique()
+selected_years = st.sidebar.multiselect('Select Year(s):', options=years, default=years)
 
-# Sidebar for state selection
-states = detailed_cases_df['States/ UTs/Cities'].unique()
-selected_state = st.sidebar.selectbox('Select a State/UT/City', states)
+# Age category filter
+age_categories = [
+    'Upto 10 Years',
+    '10-14 Years',
+    '14-18 Years',
+    '18-30 Years',
+    '30-50 Years',
+    'Above 50 Years'
+]
+selected_age_categories = st.sidebar.multiselect('Select Age Categories:', options=age_categories, default=age_categories)
 
-# Sidebar for year selection
-years = detailed_cases_df['Year'].unique()
-selected_years = st.sidebar.multiselect('Select Year(s)', years, default=years)
+# Filter data based on selections
+filtered_df = df[df['Year'].isin(selected_years)]
 
-# Age group display names mapping
-age_group_display_names = {
-    'Rape Cases (Total) No. of Victims - Upto 10 Years': 'Victims Upto 10 Years',
-    'Rape Cases (Total) No. of Victims - (10-14) Years': 'Victims (10-14) Years',
-    'Rape Cases (Total) No. of Victims - (14-18) Years': 'Victims (14-18) Years',
-    'Rape Cases (Total) No. of Victims - (30-50) Years': 'Victims (30-50) Years',
-    'Rape Cases (Total) No. of Victims - Above 50 Years': 'Victims Above 50 Years'
+# Sample data for age categories (replace these with actual data from your dataset)
+age_data = {
+    'Age Category': [
+        'Upto 10 Years',
+        '10-14 Years',
+        '14-18 Years',
+        '18-30 Years',
+        '30-50 Years',
+        'Above 50 Years'
+    ],
+    'Victim Count': [
+        100,  # rape_upto_10
+        150,  # rape_upto_10to14
+        200,  # rape_upto_14to18
+        300,  # rape_upto_18to30
+        250,  # rape_upto_30to50
+        100   # rape_above_50
+    ]
 }
 
-age_group_reverse_mapping = {v: k for k, v in age_group_display_names.items()}
+# Convert age data to DataFrame
+age_df = pd.DataFrame(age_data)
 
-# Sidebar for age group selection with user-friendly names (single select)
-selected_age_group_display = st.sidebar.selectbox(
-    'Select Age Group', list(age_group_display_names.values())
-)
-selected_age_group = age_group_reverse_mapping[selected_age_group_display]
+# Filtering the age-related data
+filtered_age_df = age_df[age_df['Age Category'].isin(selected_age_categories)]
 
-# Filter the DataFrame based on the selected state, year, and age group
-filtered_df = detailed_cases_df[
-    (detailed_cases_df['States/ UTs/Cities'] == selected_state) & 
-    (detailed_cases_df['Year'].isin(selected_years))
-]
+# Group by Year and sum the cases for the rape cases by category
+ins1 = filtered_df[["Year", "Incest (Rape) - No. of Cases Reported", "Other (Rape) - No. of Cases Reported","Rape Cases (Total) - No. of Cases Reported"]].groupby("Year").sum().reset_index()
 
-# Merge the 18-30 age group into the 30-50 age group
-if 'Rape Cases (Total) No. of Victims - (18-30) Years' in filtered_df.columns and 'Rape Cases (Total) No. of Victims - (30-50) Years' in filtered_df.columns:
-    filtered_df['Rape Cases (Total) No. of Victims - (30-50) Years'] += filtered_df['Rape Cases (Total) No. of Victims - (18-30) Years']
-    filtered_df = filtered_df.drop(columns=['Rape Cases (Total) No. of Victims - (18-30) Years'])
+# Calculate total cases and percentages
+total_rape = ins1["Rape Cases (Total) - No. of Cases Reported"].sum()
+total_incest_rape = ins1["Incest (Rape) - No. of Cases Reported"].sum() / total_rape * 100
+total_other_rape = ins1["Other (Rape) - No. of Cases Reported"].sum() / total_rape * 100
 
-# EDA: Calculate the change in cases
-if not filtered_df.empty:
-    # Sort by year
-    filtered_df.sort_values(by='Year', inplace=True)
-    
-    # Calculate year-over-year change
-    filtered_df['Change'] = filtered_df[selected_age_group].diff().fillna(0)
-    
-    # Calculate percentage change with a small constant to avoid division by zero
-    filtered_df['Percentage Change'] = (
-        (filtered_df['Change'] / (filtered_df[selected_age_group].shift(1) + 1e-6)) * 100
-    ).fillna(0)
+# Data for the chart
+categories = ['Incest Rape', 'Other Rape']
+percentages = [total_incest_rape, total_other_rape]
 
-    # Remove 'Change' column if not needed in the display
-    filtered_df = filtered_df.drop(columns=['Change'])
+# Streamlit section for Rape Cases by Category
+st.title('Percentage of Rape Cases by Category')
 
-    # Create a layout for full-screen charts and explanation
-    with st.container():
-        col1, col2 = st.columns([1, 1])  # Equal width for both columns
+# Create the bar chart with enhanced style
+fig, ax = plt.subplots(figsize=(10, 6))
+sns.set(style="whitegrid")
+colors = sns.color_palette("pastel")[0:2]
+bars = ax.bar(categories, percentages, color=colors, edgecolor='black')
 
-        with col1:
-            # Bar Graph for the filtered data using Plotly
-            fig_bar = px.bar(filtered_df, x='Year', y=selected_age_group, title=f'Total {selected_age_group_display} in {selected_state} by Year')
-            fig_bar.update_layout(
-                xaxis_title='Year',
-                yaxis_title=f'Total {selected_age_group_display}',
-                title_font_color='white',
-                xaxis_title_font_color='white',
-                yaxis_title_font_color='white',
-                paper_bgcolor='rgba(0,0,0,0)',
-                plot_bgcolor='rgba(0,0,0,0)',
-                font_color='white',
-                margin=dict(l=0, r=0, t=40, b=0)  # Adjust margins to reduce excess space
-            )
-            st.plotly_chart(fig_bar, use_container_width=True)
+# Add labels and title
+ax.set_xlabel('Rape Category', fontsize=14, fontweight='bold')
+ax.set_ylabel('Percentage (%)', fontsize=14, fontweight='bold')
+ax.set_title('Percentage of Rape Cases by Category', fontsize=16, fontweight='bold')
 
-        with col2:
-            # Pie Chart for the filtered data using Plotly
-            fig_pie = px.pie(filtered_df, names='Year', values=selected_age_group, title=f'{selected_age_group_display} Distribution in {selected_state}')
-            fig_pie.update_layout(
-                title_font_color='white',
-                paper_bgcolor='rgba(0,0,0,0)',
-                plot_bgcolor='rgba(0,0,0,0)',
-                font_color='white',
-                margin=dict(l=0, r=0, t=40, b=0)  # Adjust margins to reduce excess space
-            )
-            st.plotly_chart(fig_pie, use_container_width=True)
-        
-        # Calculate state rankings for girl safety
-        state_totals = detailed_cases_df.groupby('States/ UTs/Cities')[selected_age_group].sum().sort_values(ascending=False)
-        state_ranking = state_totals.reset_index()
-        state_ranking.columns = ['State', 'Total Cases']
+# Add numbers above bars with a more readable font
+for bar in bars:
+    yval = bar.get_height()
+    ax.text(bar.get_x() + bar.get_width()/2, yval + 1, f'{yval:.1f}%', ha='center', va='bottom', fontsize=12, color='black')
 
-        # Find the rank of the selected state
-        selected_state_rank = state_ranking[state_ranking['State'] == selected_state].index[0] + 1
-        total_states = len(state_ranking)
-        rank_info = f"{selected_state} is ranked {selected_state_rank} out of {total_states} states based on the total number of {selected_age_group_display} cases."
+# Show gridlines for better readability
+ax.yaxis.grid(True, linestyle='--', alpha=0.7)
 
-        # Add state ranking to explanation
-        explanation = f"""
-        <div style="background-color: #2e2e2e; padding: 20px; border-radius: 10px; color: #ffffff; border: 1px solid #2e2e2e;">
-            <h3 style="color: #ff9900;">Insights on {selected_age_group_display}</h3>
-            <p>Here's how the distribution of {selected_age_group_display} cases has evolved in {selected_state} over the selected years.</p>
-            <p><strong>Total cases:</strong> {filtered_df[selected_age_group].sum()}</p>
-            <p>If recent years show an increase in cases, it might indicate greater awareness or improved reporting mechanisms. For instance, a significant rise in {filtered_df[filtered_df[selected_age_group] == filtered_df[selected_age_group].max()]['Year'].values[0]} may reflect heightened attention during that period.</p>
-            <p>Conversely, if the numbers are stable or decreasing, it could suggest successful preventive measures or better support systems. For example, the decline in {filtered_df[filtered_df[selected_age_group] == filtered_df[selected_age_group].min()]['Year'].values[0]} might be due to effective outreach and prevention strategies.</p>
-            <h4 style="color: #ff9900;">State Ranking for Girl Safety</h4>
-            <b>{rank_info}</b>
-        </div>
-        """
-        st.markdown(explanation, unsafe_allow_html=True)
+# Improve layout and aesthetics
+fig.tight_layout()
+st.pyplot(fig)
 
-else:
-    st.write("No data available for the selected filters.")
+# Display additional information
+st.write(f"**Total Rape Cases (Filtered):** {total_rape}")
+st.write(f"**Total Incest Rape Cases (Filtered):** {ins1['Incest (Rape) - No. of Cases Reported'].sum()}")
+st.write(f"**Total Other Rape Cases (Filtered):** {ins1['Other (Rape) - No. of Cases Reported'].sum()}")
 
+# Streamlit section for Number of Rape Victims by Age Category
+st.title('Number of Rape Victims by Age Category (2001 - 2008)')
+
+# Create the bar chart with enhanced style
+fig, ax = plt.subplots(figsize=(12, 8))
+sns.set(style="whitegrid")
+bars = ax.bar(filtered_age_df['Age Category'], filtered_age_df['Victim Count'], color='skyblue', edgecolor='black')
+
+# Add labels and title
+ax.set_xlabel('Age Categories', fontsize=14, fontweight='bold')
+ax.set_ylabel('Number of Victims', fontsize=14, fontweight='bold')
+ax.set_title('Number of Rape Victims by Age Category (2001 - 2008)', fontsize=16, fontweight='bold')
+
+# Add numbers above bars with a more readable font
+for bar in bars:
+    yval = bar.get_height()
+    ax.text(bar.get_x() + bar.get_width()/2, yval + 10, f'{yval:,}', ha='center', va='bottom', fontsize=12, color='black')
+
+# Rotate x-axis labels for better readability
+plt.xticks(rotation=45, ha='right')
+
+# Show gridlines for better readability
+ax.yaxis.grid(True, linestyle='--', alpha=0.7)
+
+# Improve layout and aesthetics
+fig.tight_layout()
+st.pyplot(fig)
+
+# Calculate age group distribution
+age_below18 = filtered_age_df[filtered_age_df['Age Category'].isin(['Upto 10 Years', '10-14 Years', '14-18 Years'])]['Victim Count'].sum()
+age_above18 = filtered_age_df[filtered_age_df['Age Category'].isin(['18-30 Years', '30-50 Years', 'Above 50 Years'])]['Victim Count'].sum()
+
+# Streamlit section for Distribution of Rape Cases by Age Group
+st.title('Distribution of Rape Cases by Age Group')
+
+# Create the pie chart
+fig, ax = plt.subplots(figsize=(8, 8))
+colors = sns.color_palette("pastel")[2:4]
+wedges, texts, autotexts = ax.pie([age_below18, age_above18], labels=['Below 18 Years', 'Above 18 Years'],
+                                  colors=colors, autopct='%1.1f%%', startangle=140)
+
+# Add legend
+ax.legend(wedges, ['Below 18 Years', 'Above 18 Years'], title="Age Group", loc="center left", bbox_to_anchor=(1, 0, 0.5, 1))
+
+# Set title
+ax.set_title('Distribution of Rape Cases by Age Group')
+
+# Style pie chart
+for text in autotexts:
+    text.set_color('black')
+    text.set_fontsize(12)
+
+# Show the plot in Streamlit
+st.pyplot(fig)
+
+# Display additional information
+st.write("The pie chart above shows the distribution of rape cases categorized by age group for the selected years and age categories.")
